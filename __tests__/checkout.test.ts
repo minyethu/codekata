@@ -67,5 +67,22 @@ describe("Checkout test", () => {
     })
     expect(checkout.total).toBe(175);
   });
+
+  it('should return total of 190 if D->A->B->A->B->A is scanned in the order', () => {
+    const items = ["D", "A", "B", "A", "B", "A"]
+    items.forEach(item => {
+      checkout.scan(item)
+    })
+    expect(checkout.total).toBe(190);
+  });
+
+  it('should return total of 190 if A->A->A->B->B->D is scanned in the order', () => {
+    const items = ["A", "A", "A", "B", "B", "D"]
+    items.forEach(item => {
+      checkout.scan(item)
+    })
+    expect(checkout.total).toBe(190);
+  });
+
   
 })

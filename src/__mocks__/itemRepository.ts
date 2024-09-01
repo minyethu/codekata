@@ -19,7 +19,7 @@ class MockItemRepository implements IItemRepository {
             case "C":
                 return 20
             case "D":
-                return 10
+                return 15
             default:
                 return 1
         }
