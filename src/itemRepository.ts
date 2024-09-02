@@ -1,11 +1,4 @@
-// Item   Unit      Special
-//        Price     Price
-//   --------------------------
-//     A     50       3 for 130
-//     B     30       2 for 45
-//     C     20
-//     D     15
-
+import { IItemRepository } from "./interface/itemRepository"
 import { Item } from "./types"
 
 
@@ -36,7 +29,11 @@ const items: Item[] = [
     },
 ]
 
-class ItemRepository implements ItemRepository {
+class ItemRepository implements IItemRepository {
+    isItemExist(item: string): boolean {
+        return items.find((it) => it.name === item) !== undefined
+    }
+
     getUnitPriceInCent(item: string): number {
         const itemInfo = items.find((it) => it.name === item)
         return itemInfo?.unitPriceInCent ?? 0

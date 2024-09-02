@@ -10,6 +10,18 @@ import { IItemRepository } from "../interface/itemRepository"
 
 
 class MockItemRepository implements IItemRepository {
+    isItemExist(item: string) {
+        switch(item){
+            case "A":
+            case "B":
+            case "C":
+            case "D":   
+                return true
+            default:
+                return false
+        }
+    }
+
     getUnitPriceInCent(item: string) {
         switch(item){
             case "A":

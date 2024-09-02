@@ -1,10 +1,12 @@
+import { IItemRepository } from "./interface/itemRepository";
 import { IPriceRules } from "./interface/priceRules";
 
 class Checkout {
     private priceRules: IPriceRules
+    private itemRepo: IItemRepository
     private _total: number = 0
     //To store the count of each item
-    private itemCounts = new Map<string, number>()
+    private items = new Map<string, number>()
     //To store the combined total price of each item
     private itemTotalCost = new Map<string, number>()
 
@@ -13,8 +15,9 @@ class Checkout {
     }
 
 
-    constructor(priceRule: IPriceRules) {
+    constructor(priceRule: IPriceRules, itemRepo: IItemRepository) {
         this.priceRules = priceRule
+        this.itemRepo = itemRepo
     }
 
     //This method will calculate combined total of all items and also, total of the give item
@@ -30,12 +33,12 @@ class Checkout {
 
     //Method to remove an item by one unit
     public remove(item: string) {
-        if(this.itemCounts.has(item)) {
-            const currentCount = this.itemCounts.get(item)
+        if(this.items.has(item)) {
+            const currentCount = this.items.get(item)
             if(currentCount === 1) {
-                this.itemCounts.delete(item)
+                this.items.delete(item)
             } else {
-                this.itemCounts.set(item, currentCount! - 1)
+                this.items.set(item, currentCount! - 1)
             }
         } else {
             console.error("Error: The item does not exist!")
@@ -44,18 +47,23 @@ class Checkout {
 
     public clearAll() {
         this._total = 0;
-        this.itemCounts.clear()
+        this.items.clear()
         this.itemTotalCost.clear()
     }
 
     public scan(item: string) {
-        if(this.itemCounts.has(item)) {
-            const currentCount = this.itemCounts.get(item)
-            this.itemCounts.set(item, currentCount! + 1)
-        } else {
-            this.itemCounts.set(item, 1)
+        if(!this.itemRepo.isItemExist(item)) {
+            console.error("The item does not exist")
+            return;
         }
-        this.calculateTotal(item, this.itemCounts.get(item)!)
+
+        if(this.items.has(item)) {
+            const currentCount = this.items.get(item)
+            this.items.set(item, currentCount! + 1)
+        } else {
+            this.items.set(item, 1)
+        }
+        this.calculateTotal(item, this.items.get(item)!)
     }
 
 

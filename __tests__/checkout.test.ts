@@ -14,7 +14,7 @@ import PriceRules from '../src/priceRules';
 
 describe("Checkout test", () => {
   const mockPriceRule = new PriceRules(mockItemRepository)
-  const checkout = new Checkout(mockPriceRule)
+  const checkout = new Checkout(mockPriceRule, mockItemRepository)
 
   afterEach(() => {
     checkout.clearAll()
@@ -83,6 +83,15 @@ describe("Checkout test", () => {
     })
     expect(checkout.total).toBe(190);
   });
+
+  it('should return total 0 if invalid items are being scanned', () => {
+    const items = ["A@", "A1", "A3", "B4", "B3", "DD"]
+    items.forEach(item => {
+      checkout.scan(item)
+    })
+    expect(checkout.total).toBe(0);
+  });
+
 
   
 })
